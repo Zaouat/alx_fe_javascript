@@ -186,7 +186,7 @@ async function sendPostRequest() {
   }
 }
 
-// New function to sync quotes
+// Updated syncQuotes function
 async function syncQuotes() {
   try {
     // Fetch quotes from server
@@ -217,8 +217,12 @@ async function syncQuotes() {
     showRandomQuote();
 
     console.log("Quotes synced successfully");
+
+    // Add an alert to notify the user
+    alert("Quotes synced with server!");
   } catch (error) {
     console.error("Error syncing quotes:", error);
+    alert("Error syncing quotes. Please try again.");
   }
 }
 
