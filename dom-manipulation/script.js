@@ -186,6 +186,24 @@ function importFromJsonFile(event) {
   fileReader.readAsText(event.target.files[0]);
 }
 
+// Function to fetch quotes from a server
+function fetchQuotesFromServer() {
+  // Replace this URL with your actual server endpoint
+  const serverUrl = "https://your-api-endpoint.com/quotes";
+
+  fetch(serverUrl)
+    .then((response) => response.json())
+    .then((data) => {
+      quotes = data; // Update the quotes array with data from the server
+      localStorage.setItem("quotes", JSON.stringify(quotes)); // Update local storage
+      updateCategoryFilter(); // Update the category filter
+      showRandomQuote(); // Show a random quote from the updated list
+    })
+    .catch((error) => {
+      console.error("Error fetching quotes from server:", error);
+    });
+}
+
 // Event listener for the "Show New Quote" button
 document.getElementById("newQuote").addEventListener("click", showRandomQuote);
 
@@ -197,8 +215,16 @@ document
   .getElementById("importFile")
   .addEventListener("change", importFromJsonFile);
 
+// Event listener for the "Refresh Quotes" button
+document
+  .getElementById("refreshQuotes")
+  .addEventListener("click", fetchQuotesFromServer);
+
 // Generate the initial random quote
 showRandomQuote();
 
 // Update the category filter dropdown
 updateCategoryFilter();
+
+// Fetch quotes from server when the page loads
+fetchQuotesFromServer();
