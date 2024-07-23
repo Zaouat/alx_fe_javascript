@@ -222,6 +222,11 @@ async function syncQuotes() {
   }
 }
 
+// New function to automatically change quotes
+function autoChangeQuote() {
+  setInterval(showRandomQuote, 10000); // Change quote every 10 seconds
+}
+
 // Event listeners
 document.getElementById("newQuote").addEventListener("click", showRandomQuote);
 document.getElementById("exportBtn").addEventListener("click", exportToJson);
@@ -240,3 +245,4 @@ document.getElementById("syncQuotes").addEventListener("click", syncQuotes);
 showRandomQuote();
 updateCategoryFilter();
 fetchQuotesFromServer();
+autoChangeQuote(); // Start auto-changing quotes
