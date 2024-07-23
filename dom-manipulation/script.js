@@ -1,5 +1,5 @@
 // Array of quotes
-let quotes = [
+let quotes = JSON.parse(localStorage.getItem("quotes")) || [
   {
     text: "The greatest glory in living lies not in never falling, but in rising every time we fall.",
     category: "Inspirational",
@@ -63,6 +63,9 @@ function addQuote() {
   document.getElementById("newQuoteText").value = "";
   document.getElementById("newQuoteCategory").value = "";
 
+  // Update local storage with the new quotes array
+  localStorage.setItem("quotes", JSON.stringify(quotes));
+
   // Show the updated random quote
   showRandomQuote();
 }
@@ -91,11 +94,11 @@ function createAddQuoteForm() {
   addButton.textContent = "Add Quote";
   addButton.onclick = addQuote;
 
-  // addQuoteForm.appendChild(quoteTextInput);
-  // addQuoteForm.appendChild(categoryTextInput);
-  // addQuoteForm.appendChild(addButton);
+  addQuoteForm.appendChild(quoteTextInput);
+  addQuoteForm.appendChild(categoryTextInput);
+  addQuoteForm.appendChild(addButton);
 
-  // document.body.appendChild(addQuoteForm);
+  document.body.appendChild(addQuoteForm);
 }
 
 // Function to export quotes as JSON
@@ -115,6 +118,7 @@ function importFromJsonFile(event) {
   fileReader.onload = function (event) {
     const importedQuotes = JSON.parse(event.target.result);
     quotes.push(...importedQuotes);
+    localStorage.setItem("quotes", JSON.stringify(quotes));
     showRandomQuote();
     alert("Quotes imported successfully!");
   };
