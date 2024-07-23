@@ -33,16 +33,22 @@ function showRandomQuote() {
   const randomIndex = Math.floor(Math.random() * quotes.length);
   const randomQuote = quotes[randomIndex];
 
-  // Create quote elements
+  // Create quote card elements
+  const quoteCard = document.createElement("div");
+  quoteCard.className = "quote-card";
+
   const quoteText = document.createElement("p");
   quoteText.textContent = randomQuote.text;
 
   const quoteCategory = document.createElement("p");
   quoteCategory.textContent = randomQuote.category;
 
-  // Append quote elements to the quote display
-  quoteDisplay.appendChild(quoteText);
-  quoteDisplay.appendChild(quoteCategory);
+  // Append quote elements to the quote card
+  quoteCard.appendChild(quoteText);
+  quoteCard.appendChild(quoteCategory);
+
+  // Append quote card to the quote display
+  quoteDisplay.appendChild(quoteCard);
 }
 
 // Function to add a new quote
@@ -63,7 +69,7 @@ function addQuote() {
   localStorage.setItem("quotes", JSON.stringify(quotes));
 
   // Update categories in the dropdown
-  populateCategories();
+  updateCategoryFilter();
 
   // Clear input fields
   document.getElementById("newQuoteText").value = "";
@@ -71,71 +77,6 @@ function addQuote() {
 
   // Show the updated random quote
   showRandomQuote();
-}
-
-// Function to create add quote form
-function createAddQuoteForm() {
-  // Check if the form already exists
-  if (document.getElementById("addQuoteForm")) {
-    return; // Exit the function if the form already exists
-  }
-
-  const addQuoteForm = document.createElement("div");
-  addQuoteForm.id = "addQuoteForm";
-
-  const quoteTextInput = document.createElement("input");
-  quoteTextInput.id = "newQuoteText";
-  quoteTextInput.type = "text";
-  quoteTextInput.placeholder = "Enter a new quote";
-
-  const categoryTextInput = document.createElement("input");
-  categoryTextInput.id = "newQuoteCategory";
-  categoryTextInput.type = "text";
-  categoryTextInput.placeholder = "Enter quote category";
-
-  const addButton = document.createElement("button");
-  addButton.textContent = "Add Quote";
-  addButton.onclick = addQuote;
-
-  addQuoteForm.appendChild(quoteTextInput);
-  addQuoteForm.appendChild(categoryTextInput);
-  addQuoteForm.appendChild(addButton);
-
-  document.body.appendChild(addQuoteForm);
-}
-
-// Function to export quotes as JSON
-function exportToJson() {
-  const json = JSON.stringify(quotes);
-  const blob = new Blob([json], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = "quotes.json";
-  link.click();
-}
-
-// Function to import quotes from a JSON file
-function importFromJsonFile(event) {
-  const fileReader = new FileReader();
-  fileReader.onload = function (event) {
-    const importedJSON = event.target.result;
-    const importedQuotes = JSON.parse(importedJSON);
-
-    // Update the quotes array with the imported quotes
-    quotes = importedQuotes;
-
-    // Update local storage with the updated quotes array
-    localStorage.setItem("quotes", JSON.stringify(quotes));
-
-    // Update categories in the dropdown
-    populateCategories();
-
-    // Show the updated random quote
-    showRandomQuote();
-  };
-
-  fileReader.readAsText(event.target.files[0]);
 }
 
 // Function to filter quotes based on the selected category
@@ -155,23 +96,33 @@ function filterQuotes() {
   quoteDisplay.innerHTML = "";
 
   // Display the filtered quotes
-  filteredQuotes.forEach((quote) => {
+  filteredQuotes.forEach((quote, index) => {
+    if (index % 3 === 0) {
+      const slideContainer = document.createElement("div");
+      slideContainer.className = "quote-slide";
+      quoteDisplay.appendChild(slideContainer);
+    }
+
+    const quoteCard = document.createElement("div");
+    quoteCard.className = "quote-card";
+
     const quoteText = document.createElement("p");
     quoteText.textContent = quote.text;
 
     const quoteCategory = document.createElement("p");
     quoteCategory.textContent = quote.category;
 
-    quoteDisplay.appendChild(quoteText);
-    quoteDisplay.appendChild(quoteCategory);
+    quoteCard.appendChild(quoteText);
+    quoteCard.appendChild(quoteCategory);
+    quoteDisplay.lastChild.appendChild(quoteCard);
   });
 
   // Update local storage with the selected category filter
   localStorage.setItem("selectedCategory", selectedCategory);
 }
 
-// Function to populate the category filter dropdown with dynamically populated categories
-function populateCategories() {
+// Function to update the category filter dropdown with dynamically populated categories
+function updateCategoryFilter() {
   const categoryFilter = document.getElementById("categoryFilter");
 
   // Clear previous categories
@@ -201,6 +152,40 @@ function populateCategories() {
   }
 }
 
+// Function to export quotes as JSON
+function exportToJson() {
+  const json = JSON.stringify(quotes);
+  const blob = new Blob([json], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "quotes.json";
+  link.click();
+}
+
+// Function to import quotes from a JSON file
+function importFromJsonFile(event) {
+  const fileReader = new FileReader();
+  fileReader.onload = function (event) {
+    const importedJSON = event.target.result;
+    const importedQuotes = JSON.parse(importedJSON);
+
+    // Update the quotes array with the imported quotes
+    quotes = importedQuotes;
+
+    // Update local storage with the updated quotes array
+    localStorage.setItem("quotes", JSON.stringify(quotes));
+
+    // Update categories in the dropdown
+    updateCategoryFilter();
+
+    // Show the updated random quote
+    showRandomQuote();
+  };
+
+  fileReader.readAsText(event.target.files[0]);
+}
+
 // Event listener for the "Show New Quote" button
 document.getElementById("newQuote").addEventListener("click", showRandomQuote);
 
@@ -215,5 +200,5 @@ document
 // Generate the initial random quote
 showRandomQuote();
 
-// Populate the category filter dropdown
-populateCategories();
+// Update the category filter dropdown
+updateCategoryFilter();

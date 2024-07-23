@@ -1,25 +1,13 @@
+/* General Styles */
 * {
+    box-sizing: border-box;
     text-align: center;
+    font-family: Arial, sans-serif;
 }
 
-button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-}
-
-/* Style for the inputs */
-input[type="text"] {
-    width: 200px;
-    padding: 10px;
-    margin-bottom: 10px;
-}
-
-
-#newQuote {
-    margin-bottom: 20px;
+body {
+    margin: 0;
+    padding: 0;
 }
 
 .container {
@@ -29,39 +17,87 @@ input[type="text"] {
     justify-content: center;
     height: 100vh;
     padding: 20px;
-    box-sizing: border-box;
+    background-color: #f0f0f0;
 }
 
-/* Style for the headline */
 h1 {
     color: #333;
     font-size: 24px;
+    margin-bottom: 20px;
 }
 
-/* Style for the quote text */
-#quoteDisplay p:first-child {
+/* Quote Card Styles */
+.quote-slider {
+    display: flex;
+    overflow-x: auto;
+    width: 80%;
+    margin-bottom: 20px;
+}
+
+.quote-card {
+    flex: 0 0 auto;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    margin-right: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.quote-card p:first-child {
     font-size: 18px;
     font-weight: bold;
+    margin: 0 0 10px 0;
 }
 
-/* Style for the quote category */
-#quoteDisplay p:last-child {
+.quote-card p:last-child {
     font-style: italic;
     color: #888;
+    margin: 0;
 }
 
-.row {
+/* Filter and Input Styles */
+.filter-container,
+.input-container {
     display: flex;
+    justify-content: center;
     align-items: center;
-    margin-top: 50px;
+    margin-bottom: 20px;
 }
 
-.row button,
-.row input[type="file"] {
+input[type="text"],
+select {
+    width: 200px;
+    padding: 10px;
     margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
-/* Style for the file input */
+select {
+    background-color: white;
+}
+
+select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Custom File Input Styles */
 .custom-file-input {
     display: none;
     /* Hide the default file input */
@@ -80,14 +116,25 @@ h1 {
 }
 
 .custom-file-input:focus+.custom-file-label {
-    outline: 2px solid #0066cc;
+    outline: 2px solid #007bff;
 }
 
-/* Optional styles to enhance the appearance */
 .custom-file-label:hover {
     background-color: #e1e1e1;
 }
 
 .custom-file-input:active+.custom-file-label {
     background-color: #d1d1d1;
+}
+
+/* Row Styles */
+.row {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.row button,
+.row input[type="file"] {
+    margin-right: 10px;
 }

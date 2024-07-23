@@ -9,15 +9,17 @@
   <body>
     <div class="container">
       <h1>Dynamic Quote Generator</h1>
-      <div id="quoteDisplay"></div>
-      <div>
+      <div id="quoteSlider" class="quote-slider">
+        <div id="quoteDisplay" class="quote-card"></div>
+      </div>
+      <div class="filter-container">
         <select id="categoryFilter" onchange="filterQuotes()">
           <option value="all">All Categories</option>
           <!-- Dynamically populated categories -->
         </select>
         <button id="newQuote">Show New Quote</button>
       </div>
-      <div>
+      <div class="input-container">
         <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
         <input
           id="newQuoteCategory"
