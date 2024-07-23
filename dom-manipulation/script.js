@@ -63,7 +63,7 @@ function addQuote() {
   localStorage.setItem("quotes", JSON.stringify(quotes));
 
   // Update categories in the dropdown
-  updateCategoryFilter();
+  populateCategories();
 
   // Clear input fields
   document.getElementById("newQuoteText").value = "";
@@ -129,7 +129,7 @@ function importFromJsonFile(event) {
     localStorage.setItem("quotes", JSON.stringify(quotes));
 
     // Update categories in the dropdown
-    updateCategoryFilter();
+    populateCategories();
 
     // Show the updated random quote
     showRandomQuote();
@@ -170,8 +170,8 @@ function filterQuotes() {
   localStorage.setItem("selectedCategory", selectedCategory);
 }
 
-// Function to update the category filter dropdown with dynamically populated categories
-function updateCategoryFilter() {
+// Function to populate the category filter dropdown with dynamically populated categories
+function populateCategories() {
   const categoryFilter = document.getElementById("categoryFilter");
 
   // Clear previous categories
@@ -215,5 +215,5 @@ document
 // Generate the initial random quote
 showRandomQuote();
 
-// Update the category filter dropdown
-updateCategoryFilter();
+// Populate the category filter dropdown
+populateCategories();
