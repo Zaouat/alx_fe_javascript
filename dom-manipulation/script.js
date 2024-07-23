@@ -69,7 +69,13 @@ function addQuote() {
 
 // Function to create add quote form
 function createAddQuoteForm() {
+  // Check if the form already exists
+  if (document.getElementById("addQuoteForm")) {
+    return; // Exit the function if the form already exists
+  }
+
   const addQuoteForm = document.createElement("div");
+  addQuoteForm.id = "addQuoteForm";
 
   const quoteTextInput = document.createElement("input");
   quoteTextInput.id = "newQuoteText";
@@ -85,11 +91,34 @@ function createAddQuoteForm() {
   addButton.textContent = "Add Quote";
   addButton.onclick = addQuote;
 
-  addQuoteForm.appendChild(quoteTextInput);
-  addQuoteForm.appendChild(categoryTextInput);
-  addQuoteForm.appendChild(addButton);
+  // addQuoteForm.appendChild(quoteTextInput);
+  // addQuoteForm.appendChild(categoryTextInput);
+  // addQuoteForm.appendChild(addButton);
 
-  document.body.appendChild(addQuoteForm);
+  // document.body.appendChild(addQuoteForm);
+}
+
+// Function to export quotes as JSON
+function exportToJson() {
+  const json = JSON.stringify(quotes);
+  const blob = new Blob([json], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "quotes.json";
+  link.click();
+}
+
+// Function to import quotes from a JSON file
+function importFromJsonFile(event) {
+  const fileReader = new FileReader();
+  fileReader.onload = function (event) {
+    const importedQuotes = JSON.parse(event.target.result);
+    quotes.push(...importedQuotes);
+    showRandomQuote();
+    alert("Quotes imported successfully!");
+  };
+  fileReader.readAsText(event.target.files[0]);
 }
 
 // Show a random quote when the page loads
@@ -100,3 +129,9 @@ document.getElementById("newQuote").addEventListener("click", showRandomQuote);
 
 // Create the add quote form
 createAddQuoteForm();
+
+// Add event listeners for export and import
+document.getElementById("exportBtn").addEventListener("click", exportToJson);
+document
+  .getElementById("importFile")
+  .addEventListener("change", importFromJsonFile);

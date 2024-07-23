@@ -49,3 +49,45 @@ h1 {
     font-style: italic;
     color: #888;
 }
+
+.row {
+    display: flex;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.row button,
+.row input[type="file"] {
+    margin-right: 10px;
+}
+
+/* Style for the file input */
+.custom-file-input {
+    display: none;
+    /* Hide the default file input */
+}
+
+.custom-file-label {
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.custom-file-label::after {
+    content: "Select File";
+}
+
+.custom-file-input:focus+.custom-file-label {
+    outline: 2px solid #0066cc;
+}
+
+/* Optional styles to enhance the appearance */
+.custom-file-label:hover {
+    background-color: #e1e1e1;
+}
+
+.custom-file-input:active+.custom-file-label {
+    background-color: #d1d1d1;
+}
