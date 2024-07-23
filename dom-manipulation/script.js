@@ -186,6 +186,42 @@ async function sendPostRequest() {
   }
 }
 
+// New function to sync quotes
+async function syncQuotes() {
+  try {
+    // Fetch quotes from server
+    const serverUrl = "https://jsonplaceholder.typicode.com/posts";
+    const response = await fetch(serverUrl);
+    const serverQuotes = await response.json();
+
+    // Convert server quotes to our format
+    const formattedServerQuotes = serverQuotes.map((post) => ({
+      text: post.body,
+      category: post.title,
+    }));
+
+    // Merge local and server quotes
+    const mergedQuotes = [...quotes, ...formattedServerQuotes];
+
+    // Remove duplicates (based on text)
+    const uniqueQuotes = Array.from(
+      new Set(mergedQuotes.map((q) => q.text))
+    ).map((text) => mergedQuotes.find((q) => q.text === text));
+
+    // Update local quotes
+    quotes = uniqueQuotes;
+    localStorage.setItem("quotes", JSON.stringify(quotes));
+
+    // Update UI
+    updateCategoryFilter();
+    showRandomQuote();
+
+    console.log("Quotes synced successfully");
+  } catch (error) {
+    console.error("Error syncing quotes:", error);
+  }
+}
+
 // Event listeners
 document.getElementById("newQuote").addEventListener("click", showRandomQuote);
 document.getElementById("exportBtn").addEventListener("click", exportToJson);
@@ -198,6 +234,7 @@ document
 document
   .getElementById("sendPostRequest")
   .addEventListener("click", sendPostRequest);
+document.getElementById("syncQuotes").addEventListener("click", syncQuotes);
 
 // Initialize
 showRandomQuote();
