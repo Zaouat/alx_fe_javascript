@@ -59,12 +59,15 @@ function addQuote() {
   // Add the new quote to the array
   quotes.push(newQuote);
 
+  // Update local storage with the new quotes array
+  localStorage.setItem("quotes", JSON.stringify(quotes));
+
+  // Update categories in the dropdown
+  updateCategoryFilter();
+
   // Clear input fields
   document.getElementById("newQuoteText").value = "";
   document.getElementById("newQuoteCategory").value = "";
-
-  // Update local storage with the new quotes array
-  localStorage.setItem("quotes", JSON.stringify(quotes));
 
   // Show the updated random quote
   showRandomQuote();
@@ -116,26 +119,101 @@ function exportToJson() {
 function importFromJsonFile(event) {
   const fileReader = new FileReader();
   fileReader.onload = function (event) {
-    const importedQuotes = JSON.parse(event.target.result);
-    quotes.push(...importedQuotes);
+    const importedJSON = event.target.result;
+    const importedQuotes = JSON.parse(importedJSON);
+
+    // Update the quotes array with the imported quotes
+    quotes = importedQuotes;
+
+    // Update local storage with the updated quotes array
     localStorage.setItem("quotes", JSON.stringify(quotes));
+
+    // Update categories in the dropdown
+    updateCategoryFilter();
+
+    // Show the updated random quote
     showRandomQuote();
-    alert("Quotes imported successfully!");
   };
+
   fileReader.readAsText(event.target.files[0]);
 }
 
-// Show a random quote when the page loads
-showRandomQuote();
+// Function to filter quotes based on the selected category
+function filterQuotes() {
+  const selectedCategory = document.getElementById("categoryFilter").value;
 
-// Add event listener to the "Show New Quote" button
+  // Filter quotes based on the selected category
+  const filteredQuotes =
+    selectedCategory === "all"
+      ? quotes
+      : quotes.filter((quote) => quote.category === selectedCategory);
+
+  // Update the displayed quotes
+  const quoteDisplay = document.getElementById("quoteDisplay");
+
+  // Clear previous quotes
+  quoteDisplay.innerHTML = "";
+
+  // Display the filtered quotes
+  filteredQuotes.forEach((quote) => {
+    const quoteText = document.createElement("p");
+    quoteText.textContent = quote.text;
+
+    const quoteCategory = document.createElement("p");
+    quoteCategory.textContent = quote.category;
+
+    quoteDisplay.appendChild(quoteText);
+    quoteDisplay.appendChild(quoteCategory);
+  });
+
+  // Update local storage with the selected category filter
+  localStorage.setItem("selectedCategory", selectedCategory);
+}
+
+// Function to update the category filter dropdown with dynamically populated categories
+function updateCategoryFilter() {
+  const categoryFilter = document.getElementById("categoryFilter");
+
+  // Clear previous categories
+  categoryFilter.innerHTML = "";
+
+  // Get unique categories from the quotes array
+  const categories = [...new Set(quotes.map((quote) => quote.category))];
+
+  // Add "All Categories" option
+  const allOption = document.createElement("option");
+  allOption.value = "all";
+  allOption.textContent = "All Categories";
+  categoryFilter.appendChild(allOption);
+
+  // Add categories as options
+  categories.forEach((category) => {
+    const option = document.createElement("option");
+    option.value = category;
+    option.textContent = category;
+    categoryFilter.appendChild(option);
+  });
+
+  // Restore the last selected category filter
+  const selectedCategory = localStorage.getItem("selectedCategory");
+  if (selectedCategory) {
+    categoryFilter.value = selectedCategory;
+  }
+}
+
+// Event listener for the "Show New Quote" button
 document.getElementById("newQuote").addEventListener("click", showRandomQuote);
 
-// Create the add quote form
-createAddQuoteForm();
-
-// Add event listeners for export and import
+// Event listener for the "Export Quotes" button
 document.getElementById("exportBtn").addEventListener("click", exportToJson);
+
+// Event listener for the file input
 document
   .getElementById("importFile")
   .addEventListener("change", importFromJsonFile);
+
+// Generate the initial random quote
+showRandomQuote();
+
+// Update the category filter dropdown
+updateCategoryFilter();
