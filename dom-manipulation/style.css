@@ -30,7 +30,7 @@ h1 {
 .quote-slider {
     display: flex;
     overflow-x: auto;
-    width: 80%;
+    width: 90%;
     margin-bottom: 20px;
 }
 

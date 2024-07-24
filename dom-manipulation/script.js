@@ -231,6 +231,16 @@ function autoChangeQuote() {
   setInterval(showRandomQuote, 10000); // Change quote every 10 seconds
 }
 
+// Function to create the add quote form
+function createAddQuoteForm() {
+  const formContainer = document.getElementById("formContainer");
+  formContainer.innerHTML = `
+    <input type="text" id="newQuoteText" placeholder="New quote text" />
+    <input type="text" id="newQuoteCategory" placeholder="New quote category" />
+    <button onclick="addQuote()">Add Quote</button>
+  `;
+}
+
 // Event listeners
 document.getElementById("newQuote").addEventListener("click", showRandomQuote);
 document.getElementById("exportBtn").addEventListener("click", exportToJson);
@@ -250,3 +260,4 @@ showRandomQuote();
 updateCategoryFilter();
 fetchQuotesFromServer();
 autoChangeQuote(); // Start auto-changing quotes
+createAddQuoteForm(); // Create the add quote form
